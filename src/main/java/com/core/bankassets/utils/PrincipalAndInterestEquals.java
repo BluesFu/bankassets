@@ -2,6 +2,7 @@ package com.core.bankassets.utils;
 
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class PrincipalAndInterestEquals {
         double monthRate = yearRate / 12;
         BigDecimal monthIncome = new BigDecimal(invest)
                 .multiply(new BigDecimal(monthRate * Math.pow(1 + monthRate, totalmonth)))
-                .divide(new BigDecimal(Math.pow(1 + monthRate, totalmonth) - 1), 2, BigDecimal.ROUND_DOWN);
+                .divide(BigDecimal.valueOf(Math.pow(1 + monthRate, totalmonth) - 1), 2,  RoundingMode.DOWN);
         return monthIncome.doubleValue();
     }
 
@@ -50,9 +51,9 @@ public class PrincipalAndInterestEquals {
         BigDecimal monthInterest;
         for (int i = 1; i < totalmonth + 1; i++) {
             BigDecimal multiply = new BigDecimal(invest).multiply(new BigDecimal(monthRate));
-            BigDecimal sub  = new BigDecimal(Math.pow(1 + monthRate, totalmonth)).subtract(new BigDecimal(Math.pow(1 + monthRate, i-1)));
-            monthInterest = multiply.multiply(sub).divide(new BigDecimal(Math.pow(1 + monthRate, totalmonth) - 1), 6, BigDecimal.ROUND_DOWN);
-            monthInterest = monthInterest.setScale(2, BigDecimal.ROUND_DOWN);
+            BigDecimal sub  = BigDecimal.valueOf(Math.pow(1 + monthRate, totalmonth)).subtract(BigDecimal.valueOf(Math.pow(1 + monthRate, i - 1)));
+            monthInterest = multiply.multiply(sub).divide(BigDecimal.valueOf(Math.pow(1 + monthRate, totalmonth) - 1), 6,  RoundingMode.DOWN);
+            monthInterest = monthInterest.setScale(2,  RoundingMode.DOWN);
             map.put(i, monthInterest);
         }
         return map;
@@ -72,7 +73,7 @@ public class PrincipalAndInterestEquals {
         double monthRate = yearRate / 12;
         BigDecimal monthIncome = new BigDecimal(invest)
                 .multiply(new BigDecimal(monthRate * Math.pow(1 + monthRate, totalmonth)))
-                .divide(new BigDecimal(Math.pow(1 + monthRate, totalmonth) - 1), 2, BigDecimal.ROUND_DOWN);
+                .divide(BigDecimal.valueOf(Math.pow(1 + monthRate, totalmonth) - 1), 2,  RoundingMode.DOWN);
         Map<Integer, BigDecimal> mapInterest = getPerMonthInterest(invest, yearRate, totalmonth);
         Map<Integer, BigDecimal> mapPrincipal = new HashMap<Integer, BigDecimal>();
 
@@ -117,9 +118,9 @@ public class PrincipalAndInterestEquals {
         double monthRate = yearRate / 12;
         BigDecimal perMonthInterest = new BigDecimal(invest)
                 .multiply(new BigDecimal(monthRate * Math.pow(1 + monthRate, totalmonth)))
-                .divide(new BigDecimal(Math.pow(1 + monthRate, totalmonth) - 1), 2, BigDecimal.ROUND_DOWN);
+                .divide(BigDecimal.valueOf(Math.pow(1 + monthRate, totalmonth) - 1), 2,  RoundingMode.DOWN);
         BigDecimal count = perMonthInterest.multiply(new BigDecimal(totalmonth));
-        count = count.setScale(2, BigDecimal.ROUND_DOWN);
+        count = count.setScale(2,  RoundingMode.DOWN);
         return count.doubleValue();
     }
     /**

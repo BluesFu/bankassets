@@ -1,6 +1,7 @@
 package com.core.bankassets.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +30,10 @@ public class AverageCapitalUtils {
         double monthPri = getPerMonthPrincipal(invest, totalMonth);
         // 获取月利率
         double monthRate = yearRate / 12;
-        monthRate = new BigDecimal(monthRate).setScale(6, BigDecimal.ROUND_DOWN).doubleValue();
+        monthRate = new BigDecimal(monthRate).setScale(6,  RoundingMode.DOWN).doubleValue();
         for (int i = 1; i <= totalMonth; i++) {
             double monthRes = monthPri + (invest - monthPri * (i - 1)) * monthRate;
-            monthRes = new BigDecimal(monthRes).setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
+            monthRes = new BigDecimal(monthRes).setScale(2,  RoundingMode.DOWN).doubleValue();
             map.put(i, monthRes);
         }
         return map;
@@ -56,9 +57,9 @@ public class AverageCapitalUtils {
         Map<Integer, Double> map = getPerMonthPrincipalInterest(invest, yearRate, totalMonth);
         for (Map.Entry<Integer, Double> entry : map.entrySet()) {
             BigDecimal principalBigDecimal = new BigDecimal(principal);
-            BigDecimal principalInterestBigDecimal = new BigDecimal(entry.getValue());
+            BigDecimal principalInterestBigDecimal = BigDecimal.valueOf(entry.getValue());
             BigDecimal interestBigDecimal = principalInterestBigDecimal.subtract(principalBigDecimal);
-            interestBigDecimal = interestBigDecimal.setScale(2, BigDecimal.ROUND_DOWN);
+            interestBigDecimal = interestBigDecimal.setScale(2,  RoundingMode.DOWN);
             inMap.put(entry.getKey(), interestBigDecimal.doubleValue());
         }
         return inMap;
@@ -77,7 +78,7 @@ public class AverageCapitalUtils {
      * @return 每月偿还本金
      */
     private static double getPerMonthPrincipal(double invest, int totalMonth) {
-        BigDecimal monthIncome = new BigDecimal(invest).divide(new BigDecimal(totalMonth), 2, BigDecimal.ROUND_DOWN);
+        BigDecimal monthIncome = new BigDecimal(invest).divide(new BigDecimal(totalMonth), 2,  RoundingMode.DOWN);
         return monthIncome.doubleValue();
     }
 
@@ -97,7 +98,7 @@ public class AverageCapitalUtils {
         Map<Integer, Double> mapInterest = getPerMonthInterest(invest, yearRate, totalMonth);
 
         for (Map.Entry<Integer, Double> entry : mapInterest.entrySet()) {
-            count = count.add(new BigDecimal(entry.getValue()));
+            count = count.add(BigDecimal.valueOf(entry.getValue()));
         }
         return count.doubleValue();
     }
